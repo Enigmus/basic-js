@@ -24,46 +24,26 @@ class VigenereCipheringMachine {
         this.flag = flag;
         this.alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     }
-    encrypt(text, key) {
-      if(typeof text != 'string' && typeof key != 'string') throw new NotImplementedError('Incorrect arguments!');
-        let code = "";
 
-        text = text.toUpperCase();
+    #encodeDecode(str, key, isEncrypt = true) {
+        let out = "";
+        str = str.toUpperCase();
         key = key.toUpperCase();
 
-        for (let i = 0, j = 0; i < text.length; i++) {
-            if (!this.alphabet.includes(text[i])) {
-                code += text[i];
+        for (let i = 0, j = 0; i < str.length; i++) {
+            if (!this.alphabet.includes(str[i])) {
+                out += str[i];
                 continue;
             } else {
-                code +=
+                out += (isEncrypt) ?
                     this.alphabet[
-                        (this.alphabet.indexOf(text[i]) +
-                            this.alphabet.indexOf(key[j])) %
+                        (this.alphabet.indexOf(str[i]) +
+                            (this.alphabet.indexOf(key[j]))) %
                             this.alphabet.length
-                    ];
-                j++;
-            }
-            if (j === key.length) j = 0;
-        }
-        if (!this.flag) return code.split("").reverse().join("");
-        return code;
-    }
-    ////////////////////////////////////
-    decrypt(code, key) {
-      if(typeof code != 'string' && typeof key != 'string') throw new NotImplementedError('Incorrect arguments!');
-        let text = "";
-        key = key.toUpperCase();
-        let j = 0;
-        for (let i = 0; i < code.length; i++) {
-            if (!this.alphabet.includes(code[i])) {
-                text += code[i];
-                continue;
-            } else {
-                text +=
+                    ] :
                     this.alphabet[
                         (this.alphabet.length +
-                            (this.alphabet.indexOf(code[i]) -
+                            (this.alphabet.indexOf(str[i]) -
                                 this.alphabet.indexOf(key[j]))) %
                             this.alphabet.length
                     ];
@@ -71,8 +51,21 @@ class VigenereCipheringMachine {
             }
             if (j === key.length) j = 0;
         }
-        if (!this.flag) return text.split("").reverse().join("");
-        return text;
+        if (!this.flag) return out.split("").reverse().join("");
+        return out;
+    }
+
+    encrypt(text, key) {
+        if (typeof text != "string" && typeof key != "string")
+            throw new NotImplementedError("Incorrect arguments!");
+        return this.#encodeDecode(text, key);
+    }
+
+    decrypt(code, key) {
+        if (typeof code != "string" && typeof key != "string")
+            throw new NotImplementedError("Incorrect arguments!");
+        
+        return this.#encodeDecode(code, key, false);
     }
 }
 
