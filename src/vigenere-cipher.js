@@ -56,14 +56,14 @@ class VigenereCipheringMachine {
     }
 
     encrypt(text, key) {
-        if (typeof text != "string" && typeof key != "string")
-            throw new NotImplementedError("Incorrect arguments!");
+        if (typeof text != "string" || typeof key != "string")
+            throw new Error("Incorrect arguments!");
         return this.#encodeDecode(text, key);
     }
 
     decrypt(code, key) {
-        if (typeof code != "string" && typeof key != "string")
-            throw new NotImplementedError("Incorrect arguments!");
+        if (typeof code != "string" || typeof key != "string")
+            throw new Error("Incorrect arguments!");
         
         return this.#encodeDecode(code, key, false);
     }
@@ -78,7 +78,6 @@ console.log(reverseMachine.encrypt("attack at dawn!", "alphonse")); // => '!ULLD
 console.log(directMachine.decrypt("AEIHQX SX DLLU!", "alphonse")); //=> 'ATTACK AT DAWN!'
 console.log(reverseMachine.decrypt("AEIHQX SX DLLU!", "alphonse")); // => '!NWAD TA KCATTA'
 
-console.log(directMachine.decrypt("UWJJW XAGWLNFM VNNNDXHVWWL :)", "js"));
 
 module.exports = {
     VigenereCipheringMachine,
